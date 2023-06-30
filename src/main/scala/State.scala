@@ -13,9 +13,10 @@ case class State(canva : ArrayBuffer[ArrayBuffer[Boolean]], allParticules: List[
     val newAllParticule = allParticules.map(p =>
       val neighbours = neighboursOf(p.coordinate.x, p.coordinate.y, PARTICULE_SIZE)
       if (neighbours.exists(c => canva(c.x)(c.y))) {
-        p.copy(direction = Direction.values(Random.nextInt(numberOfDirection)))
+        val newDirection = Direction.values(Random.nextInt(numberOfDirection))
+        p.copy(coordinate = getPositions(newDirection, p.coordinate.x, p.coordinate.y), direction = newDirection)
       } else {
-        p.copy(getPositions(p.direction, p.coordinate.x, p.coordinate.y))
+        p.copy(coordinate = getPositions(p.direction, p.coordinate.x, p.coordinate.y))
       }
     )
 
@@ -80,6 +81,6 @@ case class State(canva : ArrayBuffer[ArrayBuffer[Boolean]], allParticules: List[
   def neighboursOf(x: Int, y: Int, distance: Int): Seq[Coordinate] =
     for {
       i <- -distance to distance
-      j <- -distance to distance if (i, j) != (0, 0)
+      j <- -distance to distance if (i, j) != (0, 0) && (0 until WIDTH).contains(x + i) && (0 until HEIGHT).contains(y + j)
     } yield Coordinate(x + i, y + j)
 }

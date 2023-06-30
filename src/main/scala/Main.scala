@@ -15,8 +15,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 object Main extends JFXApp3 {
 
-  val PARTICULE_SIZE = 1
-  val NUMBER_OF_PARTICULE = 500
+  val PARTICULE_SIZE = 5
+  val NUMBER_OF_PARTICULE = 100
   val WIDTH = 800
   val HEIGHT = 800
 
@@ -35,7 +35,7 @@ object Main extends JFXApp3 {
   )
 
   def gameLoop(update: () => Unit): Unit =
-    def tick = Future {update(); Thread.sleep(50)}
+    def tick = Future {update(); Thread.sleep(10)}
     def loopAgain = Future(gameLoop(update))
     for {
       _ <- tick
